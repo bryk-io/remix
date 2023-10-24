@@ -1,0 +1,17 @@
+{
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "printWidth": 90,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "quoteProps": "consistent",
+  "bracketSameLine": true,
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "multilineArraysWrapThreshold": 3,
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-multiline-arrays"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "zixuanchen.vitest-explorer",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-playwright.playwright"
+  ]
+}
