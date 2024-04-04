@@ -4,7 +4,7 @@ test('has title', async ({ page }) => {
   await page.goto('/');
 
   // title is properly set
-  await expect(page).toHaveTitle('Remix App');
+  await expect(page).toHaveTitle('New Remix App');
 });
 
 test('show base links', async ({ page }) => {

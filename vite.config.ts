@@ -1,21 +1,25 @@
 /// <reference types="vitest" />
-
-import * as path from 'path';
+import { vitePlugin as remix } from '@remix-run/dev';
+import { installGlobals } from '@remix-run/node';
 import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import * as path from 'path';
 
-// https://vitejs.dev/config/
+installGlobals();
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [remix(), tsconfigPaths()],
   test: {
-    globals: true,
-    environment: 'jsdom',
     include: ['app/**/*.test.{js,ts,jsx,tsx}'],
+    exclude: ['tests/**/*'],
+    coverage: {
+      provider: 'v8',
+      include: ['app/**/*.{js,ts,jsx,tsx}'],
+    },
   },
   resolve: {
     alias: {
-      // To support absolute import paths for components:
-      //   `import Counter from '~/lib/Counter.svelte';`
+      // same `paths` as tsconfig.json
       '~': path.resolve('./app'),
     },
   },
