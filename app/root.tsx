@@ -1,22 +1,22 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/node';
 
-// Add main application styles (Tailwind CSS)
-import stylesheet from '~/tailwind.css?url';
+// Core application styles
+import appStyles from '~/root.css?url';
 export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: stylesheet },
+  { rel: 'stylesheet', href: appStyles },
 ];
 
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="h-full">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -25,6 +25,6 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   );
 }
 
-export default function App() {
+export default function AppRoot() {
   return <Outlet />;
 }

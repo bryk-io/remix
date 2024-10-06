@@ -1,13 +1,12 @@
 import globals from 'globals';
-import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
-import react from 'eslint-plugin-react';
-import jsxA11Y from 'eslint-plugin-jsx-a11y';
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
-import _import from 'eslint-plugin-import';
-import tsParser from '@typescript-eslint/parser';
+import js from '@eslint/js';
+import pluginReact from 'eslint-plugin-react';
+import pluginA11Y from 'eslint-plugin-jsx-a11y';
+import pluginImport from 'eslint-plugin-import';
+import shadcn from './shadcn.eslint.js';
+
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -38,17 +37,19 @@ export default [
       '**/yarn.lock',
     ],
   },
-  ...compat.extends('eslint:recommended'),
   {
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.commonjs,
       },
-
       ecmaVersion: 'latest',
       sourceType: 'module',
-
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
@@ -56,32 +57,26 @@ export default [
       },
     },
   },
-  ...fixupConfigRules(
-    compat.extends(
-      'plugin:react/recommended',
-      'plugin:react/jsx-runtime',
-      'plugin:react-hooks/recommended',
-      'plugin:jsx-a11y/recommended'
-    )
-  ).map((config) => ({
-    ...config,
-    files: ['**/*.{js,jsx,ts,tsx}'],
-  })),
+  ...compat.extends(
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
+    'plugin:jsx-a11y/recommended',
+    'plugin:tailwindcss/recommended'
+  ),
+  // overrides for shadcn-ui components
+  shadcn,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
-
     plugins: {
-      'react': fixupPluginRules(react),
-      'jsx-a11y': fixupPluginRules(jsxA11Y),
+      'react': pluginReact,
+      'jsx-a11y': pluginA11Y,
+      'import': pluginImport,
     },
-
     settings: {
-      'react': {
-        version: 'detect',
-      },
-
       'formComponents': ['Form'],
-
       'linkComponents': [
         {
           name: 'Link',
@@ -92,55 +87,8 @@ export default [
           linkAttribute: 'to',
         },
       ],
-
       'import/resolver': {
         typescript: {},
-      },
-    },
-  },
-  ...fixupConfigRules(
-    compat.extends(
-      'plugin:@typescript-eslint/recommended',
-      'plugin:import/recommended',
-      'plugin:import/typescript',
-      'prettier'
-    )
-  ).map((config) => ({
-    ...config,
-    files: ['**/*.{ts,tsx}'],
-  })),
-  {
-    files: ['**/*.{ts,tsx}'],
-
-    plugins: {
-      '@typescript-eslint': fixupPluginRules(typescriptEslint),
-      'import': fixupPluginRules(_import),
-    },
-
-    languageOptions: {
-      parser: tsParser,
-    },
-
-    settings: {
-      'import/internal-regex': '^~/',
-
-      'import/resolver': {
-        node: {
-          extensions: ['.ts', '.tsx'],
-        },
-
-        typescript: {
-          alwaysTryTypes: true,
-        },
-      },
-    },
-  },
-  {
-    files: ['**/.eslintrc.cjs'],
-
-    languageOptions: {
-      globals: {
-        ...globals.node,
       },
     },
   },

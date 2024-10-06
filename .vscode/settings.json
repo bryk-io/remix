@@ -1,4 +1,7 @@
 {
   "vitest.enable": true,
-  "vitest.include": ["**/*.test.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"]
+  "vitest.include": [
+    "**/*.test.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"
+  ],
+  "sarif-viewer.connectToGithubCodeScanning": "off"
 }
