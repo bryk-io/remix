@@ -6,9 +6,9 @@ export async function loader() {
   return redirect('/');
 }
 
-// ! POST: /logout
-// ! delete active session
+// POST: /logout
 export async function action({ request }: ActionFunctionArgs) {
+  // ! delete active session
   const session = await getSession(request.headers.get('Cookie'));
   return redirect('/', {
     headers: {

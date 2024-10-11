@@ -3,7 +3,7 @@ import { timeout, getSession, commitSession } from '~/lib/session.server';
 import { LoginForm } from '~/components/auth/login';
 import type { ActionFunctionArgs } from '@remix-run/node';
 
-// ! POST: /login
+// POST: /login
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 

@@ -1,8 +1,8 @@
 import { MetaFunction, redirect } from '@remix-run/node';
-import { Form } from '@remix-run/react';
+import { Form, useLoaderData } from '@remix-run/react';
 import { Button } from '~/components/ui/button';
 import { getSession } from '~/lib/session.server';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/node';
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,27 +11,29 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+// GET: /
 export async function loader({ request }: LoaderFunctionArgs) {
   // ! validate the user is logged in or not.
   const session = await getSession(request.headers.get('Cookie'));
-  if (!session.get('email')) {
+  const email = session.get('email');
+  if (!email) {
+    // not logged in, redirect to login form
     return redirect('/login');
   }
-  return {};
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-  console.log('_index action: ' + request);
-  return null;
+  return { email: email };
 }
 
 export default function Index() {
+  const { email } = useLoaderData<typeof loader>();
+
   return (
-    <>
-      <pre>main dashboard layout starts here...</pre>
+    <div className="container justify-center pt-10 text-center">
+      <pre className="mb-4">
+        Hello <strong>{email}</strong>, main dashboard layout starts here...
+      </pre>
       <Form action="/logout" method="POST">
         <Button type="submit">Logout</Button>
       </Form>
-    </>
+    </div>
   );
 }

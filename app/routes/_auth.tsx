@@ -6,10 +6,12 @@ import { Icon } from '~/components/icons';
 import { getSession } from '~/lib/session.server';
 import type { LoaderFunctionArgs } from '@remix-run/node';
 
+// GET: / (when user is not logged in)
 export async function loader({ request }: LoaderFunctionArgs) {
   // ! validate the user is logged in or not.
   const session = await getSession(request.headers.get('Cookie'));
   if (session.get('email')) {
+    // already logged in, redirect to main page again
     return redirect('/');
   }
   return {};
