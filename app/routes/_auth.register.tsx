@@ -1,6 +1,6 @@
 import { redirect } from '@remix-run/node';
 import { timeout } from '~/lib/session.server';
-import { RegisterForm } from '~/components/auth/register';
+import { RegisterForm } from '~/views/auth/register';
 import type { ActionFunctionArgs } from '@remix-run/node';
 
 // POST: /register

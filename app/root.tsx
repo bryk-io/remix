@@ -1,4 +1,5 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import { Toaster } from '~/components/ui/sonner';
 import type { LinksFunction } from '@remix-run/node';
 
 // Core application styles
@@ -18,6 +19,7 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
       </head>
       <body className="h-full">
         {children}
+        <Toaster visibleToasts={4} duration={5000} pauseWhenPageIsHidden />
         <ScrollRestoration />
         <Scripts />
       </body>

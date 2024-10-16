@@ -17,6 +17,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return {};
 }
 
+// Defines the main layout for the authentication screens.
 export default function AuthLayout() {
   const topNav = topNavDetails(useLocation().pathname);
 

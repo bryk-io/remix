@@ -1,6 +1,6 @@
 import { json, redirect } from '@remix-run/node';
 import { timeout, getSession, commitSession } from '~/lib/session.server';
-import { LoginForm } from '~/components/auth/login';
+import { LoginForm } from '~/views/auth/login';
 import type { ActionFunctionArgs } from '@remix-run/node';
 
 // POST: /login
