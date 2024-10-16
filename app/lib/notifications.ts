@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// https://sonner.emilkowal.ski/getting-started
 import { toast } from '~/components/ui/sonner';
 
 export type NotificationStyle =

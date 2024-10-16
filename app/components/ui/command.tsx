@@ -1,10 +1,14 @@
 import * as React from 'react';
-import { type DialogProps } from '@radix-ui/react-dialog';
+import { cn } from '~/lib/utils';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Command as CommandPrimitive } from 'cmdk';
-
-import { cn } from '~/lib/utils';
-import { Dialog, DialogContent } from '~/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from '~/components/ui/dialog';
+import { type DialogProps } from '@radix-ui/react-dialog';
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -26,6 +30,13 @@ interface CommandDialogProps extends DialogProps {}
 const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
   return (
     <Dialog {...props}>
+      {/* additional elements added to meet accessibility requirements */}
+      <DialogTitle hidden aria-hidden>
+        Command dialog window
+      </DialogTitle>
+      <DialogDescription hidden aria-hidden>
+        Modal window displaying available command entries.
+      </DialogDescription>
       <DialogContent className="overflow-hidden p-0">
         <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:size-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:size-5">
           {children}
@@ -51,7 +62,6 @@ const CommandInput = React.forwardRef<
     />
   </div>
 ));
-
 CommandInput.displayName = CommandPrimitive.Input.displayName;
 
 const CommandList = React.forwardRef<
@@ -64,7 +74,6 @@ const CommandList = React.forwardRef<
     {...props}
   />
 ));
-
 CommandList.displayName = CommandPrimitive.List.displayName;
 
 const CommandEmpty = React.forwardRef<
@@ -73,7 +82,6 @@ const CommandEmpty = React.forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty ref={ref} className="py-6 text-center text-sm" {...props} />
 ));
-
 CommandEmpty.displayName = CommandPrimitive.Empty.displayName;
 
 const CommandGroup = React.forwardRef<
@@ -89,7 +97,6 @@ const CommandGroup = React.forwardRef<
     {...props}
   />
 ));
-
 CommandGroup.displayName = CommandPrimitive.Group.displayName;
 
 const CommandSeparator = React.forwardRef<
@@ -117,7 +124,6 @@ const CommandItem = React.forwardRef<
     {...props}
   />
 ));
-
 CommandItem.displayName = CommandPrimitive.Item.displayName;
 
 const CommandShortcut = ({
