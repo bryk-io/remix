@@ -12,7 +12,7 @@ export default {
     'react/prop-types': [
       'warn',
       {
-        ignore: ['className', 'classNames', 'mode'],
+        ignore: ['className'],
       },
     ],
     'react/no-unknown-property': [

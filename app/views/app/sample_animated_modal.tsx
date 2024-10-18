@@ -68,7 +68,7 @@ export const AnimatedModal: React.FunctionComponent = () => {
             </div>
           </ModalContent>
           <ModalFooter className="gap-4">
-            <Button variant={'secondary'}>Cancel</Button>
+            <Button variant={'ghost'}>Cancel</Button>
             <Button>Book now</Button>
           </ModalFooter>
         </ModalBody>

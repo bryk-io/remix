@@ -1,11 +1,24 @@
-import * as React from 'react';
+// import * as React from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import { DayPicker } from 'react-day-picker';
+import type {
+  DayPickerDefaultProps,
+  DayPickerSingleProps,
+  DayPickerMultipleProps,
+  DayPickerRangeProps,
+  StyledComponent,
+  DateRange,
+} from 'react-day-picker';
 
 import { cn } from '~/lib/utils';
 import { buttonVariants } from '~/components/ui/button';
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+// export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+type CalendarProps =
+  | DayPickerDefaultProps
+  | DayPickerSingleProps
+  | DayPickerMultipleProps
+  | DayPickerRangeProps;
 
 function Calendar({
   className,
@@ -56,8 +69,8 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeftIcon className="size-4" />,
-        IconRight: ({ ...props }) => <ChevronRightIcon className="size-4" />,
+        IconLeft: iconLeft,
+        IconRight: iconRight,
       }}
       {...props}
     />
@@ -65,4 +78,12 @@ function Calendar({
 }
 Calendar.displayName = 'Calendar';
 
-export { Calendar };
+const iconLeft = (props: Omit<StyledComponent, 'children'>) => {
+  return <ChevronLeftIcon className="size-4" {...props} />;
+};
+
+const iconRight = (props: Omit<StyledComponent, 'children'>) => {
+  return <ChevronRightIcon className="size-4" {...props} />;
+};
+
+export { Calendar, type CalendarProps, type DateRange };
