@@ -41,43 +41,37 @@ export const ToasNotifications: React.FunctionComponent = () => {
   }
 
   return (
-    <>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="w-[230px] justify-between">
-            {value
-              ? notifications.find((n) => n.value === value)?.label
-              : 'Dispatch notification...'}
-            <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[230px] p-0">
-          <Command>
-            <CommandInput placeholder="Filter styles..." className="h-9" />
-            <CommandList>
-              <CommandEmpty>No framework found.</CommandEmpty>
-              <CommandGroup>
-                {notifications.map((n) => (
-                  <CommandItem key={n.value} value={n.value} onSelect={onSelect}>
-                    {n.label}
-                    <CheckIcon
-                      className={cn(
-                        'ml-auto h-4 w-4',
-                        value === n.value ? 'opacity-100' : 'opacity-0'
-                      )}
-                    />
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" aria-expanded={open} className="w-[240px]">
+          {value
+            ? notifications.find((n) => n.value === value)?.label
+            : 'Dispatch notification...'}
+          <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[240px] p-0">
+        <Command>
+          <CommandInput placeholder="Filter styles..." className="h-9" />
+          <CommandList>
+            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandGroup>
+              {notifications.map((n) => (
+                <CommandItem key={n.value} value={n.value} onSelect={onSelect}>
+                  {n.label}
+                  <CheckIcon
+                    className={cn(
+                      'ml-auto h-4 w-4',
+                      value === n.value ? 'opacity-100' : 'opacity-0'
+                    )}
+                  />
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 };
 

@@ -1,7 +1,6 @@
 import { redirect } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { Form, Outlet, useLoaderData } from '@remix-run/react';
 import { getSession } from '~/lib/session.server';
-import { Form, Outlet } from '@remix-run/react';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
 import type { LoaderFunctionArgs } from '@remix-run/node';
