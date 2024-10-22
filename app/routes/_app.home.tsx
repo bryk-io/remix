@@ -3,6 +3,7 @@ import { CommandBar } from '~/views/app/sample_command';
 import { SimpleModal } from '~/views/app/sample_modal';
 import { AnimatedModal } from '~/views/app/sample_animated_modal';
 import { DatePicker } from '~/views/app/date_picker';
+import { SampleDrawer } from '~/views/app/sample_drawer';
 
 export default function Index() {
   return (
@@ -11,6 +12,7 @@ export default function Index() {
       <SimpleModal />
       <DatePicker />
       <AnimatedModal />
+      <SampleDrawer />
       <CommandBar />
     </div>
   );
