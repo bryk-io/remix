@@ -10,6 +10,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
   InputOTPSeparator,
+  PATTERN_ONLY_DIGITS,
 } from '~/components/ui/input-otp';
 
 export interface LoginRequestDetails {
@@ -77,7 +78,7 @@ export const LoginForm: React.FunctionComponent = () => {
                 <Label className="sr-only" htmlFor="mfa">
                   MFA code
                 </Label>
-                <InputOTP id="mfa" name="mfa" maxLength={6}>
+                <InputOTP id="mfa" name="mfa" maxLength={6} pattern={PATTERN_ONLY_DIGITS}>
                   <InputOTPGroup>
                     <InputOTPSlot className="size-12" index={0} />
                     <InputOTPSlot className="size-12" index={1} />

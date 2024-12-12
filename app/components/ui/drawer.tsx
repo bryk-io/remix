@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Drawer as DrawerPrimitive } from 'vaul';
 import { cn } from '~/lib/utils';
 import { cva } from 'class-variance-authority';
+import { Drawer as DrawerPrimitive } from 'vaul';
 import { type DialogProps } from 'vaul';
 
-// define styles for
-const drawerVariants = cva('fixed z-50 flex h-auto flex-col border bg-background', {
+// define styles for the different drawer positions
+const drawerVariants = cva('absolute z-50 flex h-auto flex-col border bg-background', {
   variants: {
     direction: {
       bottom: 'inset-x-0 bottom-0 mt-24 rounded-t-[10px]',
@@ -19,35 +19,70 @@ const drawerVariants = cva('fixed z-50 flex h-auto flex-col border bg-background
   },
 });
 
-const DrawerContext = React.createContext<{
-  direction?: 'right' | 'top' | 'bottom' | 'left';
-}>({
-  direction: 'bottom',
-});
-
-const Drawer = ({
-  shouldScaleBackground = true,
-  direction = 'bottom',
-  ...props
-}: DialogProps) => (
-  <DrawerContext.Provider value={{ direction }}>
-    <DrawerPrimitive.Root
-      handleOnly
-      shouldScaleBackground={shouldScaleBackground}
-      direction={direction}
-      {...props}
-    />
-  </DrawerContext.Provider>
-);
-Drawer.displayName = 'Drawer';
-
 const DrawerTrigger = DrawerPrimitive.Trigger;
 
 const DrawerPortal = DrawerPrimitive.Portal;
 
 const DrawerClose = DrawerPrimitive.Close;
 
-const DrawerNested = DrawerPrimitive.NestedRoot;
+const DrawerContext = React.createContext<{
+  title?: string;
+  description?: string;
+  direction?: 'right' | 'top' | 'bottom' | 'left';
+}>({
+  title: '',
+  description: '',
+  direction: 'bottom',
+});
+
+type DrawerProps = DialogProps & {
+  title?: string;
+  description?: string;
+};
+
+const DrawerWrapper = ({ className, children }: React.HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div
+      data-vaul-drawer-wrapper
+      className={cn('relative flex min-h-screen flex-col bg-background', className)}>
+      {children}
+    </div>
+  );
+};
+DrawerWrapper.displayName = 'DrawerWrapper';
+
+const Drawer = ({
+  shouldScaleBackground = true,
+  direction = 'bottom',
+  title = '',
+  description = '',
+  ...props
+}: DrawerProps) => {
+  return (
+    <DrawerContext.Provider
+      value={{
+        title: title,
+        description: description,
+        direction: direction,
+      }}>
+      <DrawerPrimitive.Root
+        // when opening the drawer on the sides we don't display the handle
+        // and the drawer can't be dragged
+        handleOnly
+        shouldScaleBackground={shouldScaleBackground}
+        direction={direction}
+        {...props}
+      />
+    </DrawerContext.Provider>
+  );
+};
+Drawer.displayName = 'Drawer';
+
+const DrawerNested = (props: DrawerProps) => {
+  const { direction } = React.useContext(DrawerContext);
+  return <DrawerPrimitive.NestedRoot direction={direction} {...props} />;
+};
+Drawer.displayName = 'DrawerNested';
 
 const DrawerOverlay = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Overlay>,
@@ -65,7 +100,7 @@ const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
 >(({ className, children, ...props }, ref) => {
-  const { direction } = React.useContext(DrawerContext);
+  const { direction, title, description } = React.useContext(DrawerContext);
 
   return (
     <DrawerPortal>
@@ -78,6 +113,10 @@ const DrawerContent = React.forwardRef<
           <DrawerPrimitive.Handle className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
           // <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted"></div>
         )}
+        <DrawerHeader>
+          {title !== '' && <DrawerTitle>{title}</DrawerTitle>}
+          {description !== '' && <DrawerDescription>{description}</DrawerDescription>}
+        </DrawerHeader>
         {children}
         {direction == 'top' && (
           <DrawerPrimitive.Handle className="mx-auto mb-4 h-2 w-[100px] rounded-full bg-muted" />
@@ -129,6 +168,7 @@ DrawerDescription.displayName = DrawerPrimitive.Description.displayName;
 export {
   Drawer,
   DrawerNested,
+  DrawerWrapper,
   DrawerPortal,
   DrawerOverlay,
   DrawerTrigger,

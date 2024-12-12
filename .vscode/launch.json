@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "name": "Start server",
+      "request": "launch",
+      "sourceMaps": true,
+      "runtimeExecutable": "npm",
+      "console": "internalConsole",
+      "internalConsoleOptions": "openOnSessionStart",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "type": "chrome",
+      "name": "Launch client",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}",
+      "enableContentValidation": false,
+      "sourceMaps": true
+    }
+  ]
+}

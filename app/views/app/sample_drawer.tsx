@@ -1,30 +1,50 @@
 import { Button } from '~/components/ui/button';
 import {
   Drawer,
+  DrawerNested,
+  DrawerFooter,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from '~/components/ui/drawer';
 
 export const SampleDrawer: React.FunctionComponent = () => {
   return (
-    <Drawer direction="right">
+    <Drawer direction="bottom">
       <DrawerTrigger asChild>
         <Button>Open Drawer</Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-[500px]">
-          <DrawerHeader>
-            <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-            <DrawerDescription>This action cannot be undone.</DrawerDescription>
-          </DrawerHeader>
+        <div className="mx-auto w-[640px]">
+          <p className="text-base">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum maxime
+            libero voluptas consequatur, voluptate adipisci eius molestiae quaerat
+            necessitatibus quisquam laudantium quam labore repudiandae saepe deleniti.
+            Alias, aut fuga. Perspiciatis.
+          </p>
           <DrawerFooter>
-            <Button>Submit</Button>
-            <DrawerClose>
+            <DrawerNested>
+              <DrawerTrigger asChild>
+                <Button>Open Second Drawer</Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <div className="mx-auto w-[640px]">
+                  <p className="text-base">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum
+                    maxime libero voluptas consequatur, voluptate adipisci eius molestiae
+                    quaerat necessitatibus quisquam laudantium quam labore repudiandae
+                    saepe deleniti. Alias, aut fuga. Perspiciatis.
+                  </p>
+                  <DrawerFooter>
+                    <DrawerClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </div>
+              </DrawerContent>
+            </DrawerNested>
+
+            <DrawerClose asChild>
               <Button variant="outline">Cancel</Button>
             </DrawerClose>
           </DrawerFooter>

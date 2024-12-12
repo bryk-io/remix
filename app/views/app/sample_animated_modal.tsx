@@ -11,7 +11,7 @@ export const AnimatedModal: React.FunctionComponent = () => {
   return (
     <div className="flex items-center justify-center">
       <Modal>
-        <ModalTrigger className="group/modal-btn flex justify-center bg-black text-white dark:bg-white dark:text-black">
+        <ModalTrigger className="group/modal-btn flex justify-center bg-primary text-sm font-medium text-primary-foreground shadow hover:bg-primary/90">
           <span className="text-center transition duration-500 group-hover/modal-btn:translate-x-40">
             Animated modal
           </span>

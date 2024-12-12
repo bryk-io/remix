@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { DashIcon } from '@radix-ui/react-icons';
-import { OTPInput, OTPInputContext } from 'input-otp';
+import {
+  OTPInput,
+  OTPInputContext,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from 'input-otp';
 import type { OTPInputProps } from 'input-otp';
 
 import { cn } from '~/lib/utils';
@@ -65,4 +71,16 @@ const InputOTPSeparator = React.forwardRef<
 ));
 InputOTPSeparator.displayName = 'InputOTPSeparator';
 
-export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };
+const PATTERN_ONLY_DIGITS = REGEXP_ONLY_DIGITS;
+const PATTERN_ONLY_CHARS = REGEXP_ONLY_CHARS;
+const PATTERN_ONLY_DIGITS_AND_CHARS = REGEXP_ONLY_DIGITS_AND_CHARS;
+
+export {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+  PATTERN_ONLY_DIGITS,
+  PATTERN_ONLY_CHARS,
+  PATTERN_ONLY_DIGITS_AND_CHARS,
+};

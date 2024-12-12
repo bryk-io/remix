@@ -1,4 +1,5 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import { DrawerWrapper } from '~/components/ui/drawer';
 import { Toaster } from '~/components/ui/sonner';
 import type { LinksFunction } from '@remix-run/node';
 
@@ -18,7 +19,7 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
         <Links />
       </head>
       <body className="h-full">
-        {children}
+        <DrawerWrapper className="h-full">{children}</DrawerWrapper>
         <Toaster visibleToasts={4} duration={5000} pauseWhenPageIsHidden />
         <ScrollRestoration />
         <Scripts />
