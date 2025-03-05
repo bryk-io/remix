@@ -3,9 +3,7 @@ import type { LinksFunction } from '@remix-run/node';
 
 // Add main application styles (Tailwind CSS)
 import stylesheet from '~/tailwind.css?url';
-export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: stylesheet },
-];
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }];
 
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

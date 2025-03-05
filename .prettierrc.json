@@ -9,9 +9,5 @@
   "bracketSameLine": true,
   "bracketSpacing": true,
   "arrowParens": "always",
-  "multilineArraysWrapThreshold": 3,
-  "plugins": [
-    "prettier-plugin-tailwindcss",
-    "prettier-plugin-multiline-arrays"
-  ]
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
