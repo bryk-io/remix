@@ -8,7 +8,19 @@ import * as path from 'path';
 installGlobals();
 
 export default defineConfig({
-  plugins: [remix(), tsconfigPaths()],
+  plugins: [
+    // add Remix future-flags
+    remix({
+      future: {
+        v3_singleFetch: true,
+        v3_fetcherPersist: true,
+        v3_throwAbortReason: true,
+        v3_relativeSplatPath: true,
+        v3_lazyRouteDiscovery: true,
+      },
+    }),
+    tsconfigPaths(),
+  ],
   test: {
     include: ['app/**/*.test.{js,ts,jsx,tsx}'],
     exclude: ['tests/**/*'],
