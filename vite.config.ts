@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 import { vitePlugin as remix } from '@remix-run/dev';
+import tailwindcss from '@tailwindcss/vite';
 import { installGlobals } from '@remix-run/node';
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -9,6 +10,8 @@ installGlobals();
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
+
     // add Remix future-flags
     remix({
       future: {
