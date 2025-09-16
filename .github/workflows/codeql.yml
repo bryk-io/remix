@@ -1,0 +1,71 @@
+name: 'codeQL'
+permissions: read-all
+env:
+  commit_msg: ''
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: {}
+jobs:
+  # Semantic code analysis to discover vulnerabilities in the codebase
+  # using GitHub's CodeQL.
+  # https://codeql.github.com/docs/
+  # https://docs.github.com/en/code-security/code-scanning/managing-your-code-scanning-configuration/javascript-typescript-built-in-queries
+  analyze:
+    name: analyze
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write # for autobuild to send a status report
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['javascript']
+    steps:
+      # Harden workflow runner
+      - name: Harden workflow runner (audit all outbound calls)
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
+
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      # Get commit message
+      - name: Get commit message
+        run: |
+          echo 'commit_msg<<EOF' >> $GITHUB_ENV
+          git log --format=%B -n 1 ${{ github.sha }} >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@2d92b76c45b91eb80fc44c74ce3fce0ee94e8f9d # v3.30.0
+        with:
+          languages: ${{ matrix.language }}
+          # If you wish to specify custom queries, you can do so here or in a config file.
+          # By default, queries listed here will override any specified in a config file.
+          # Prefix the list here with "+" to use these queries and those in the config file.
+          # queries: ./path/to/local/query, your-org/your-repo/queries@main
+
+      # Auto build attempts to build any compiled languages  (C/C++, C#, or Java).
+      - name: Auto build
+        uses: github/codeql-action/autobuild@2d92b76c45b91eb80fc44c74ce3fce0ee94e8f9d # v3.30.0
+
+      # Run manual build only if auto-build fails
+      - name: Manual build
+        if: ${{ failure() }}
+        run: |
+          make bootstrap
+          make release
+
+      # Run analysis
+      # Can be excluded if the commit message contains: [skip codeql]
+      - name: Perform CodeQL analysis
+        if: ${{ !contains(env.commit_msg, '[skip codeql]') }}
+        uses: github/codeql-action/analyze@2d92b76c45b91eb80fc44c74ce3fce0ee94e8f9d # v3.30.0
