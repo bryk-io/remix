@@ -118,6 +118,10 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
 
+      # Ensure project compile and build successfully
+      - name: Build
+        run: make build
+
       # run Playwright tests
       - name: Run Playwright tests
         run: make e2e
