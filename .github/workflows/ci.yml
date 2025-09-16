@@ -1,0 +1,139 @@
+name: ci
+permissions: read-all
+env:
+  # used to hold the commit message
+  commit_msg: ''
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+  workflow_dispatch: {}
+jobs:
+  test:
+    name: code quality and correctness
+    runs-on: ubuntu-latest
+    steps:
+      # Harden workflow runner
+      - name: Harden workflow runner (audit all outbound calls)
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
+
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      # package manager
+      - name: Install pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        with:
+          version: 10
+
+      # NodeJS
+      - name: Set up NodeJS
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22 # current LTS
+          cache: 'pnpm' # cache pnpm packages automatically
+
+      # dependencies
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ensure .svelte-kit setup is valid
+      - name: Prepare project
+        run: npx run prepare
+
+      # Get commit message
+      - name: Get commit message
+        run: |
+          echo 'commit_msg<<EOF' >> $GITHUB_ENV
+          git log --format=%B -n 1 ${{ github.sha }} >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      # Scan for leaked secrets
+      # Can be excluded if the commit message contains: [skip scan-secrets]
+      # https://github.com/marketplace/actions/trufflehog-oss
+      - name: Scan for leaked secrets
+        uses: trufflesecurity/trufflehog@18c7b1fc33e6c16b27ea66ff27cc7e642fb7cd0a # v3.90.6
+        if: ${{ !contains(env.commit_msg, '[skip scan-secrets]') }}
+        with:
+          base: '' # scan entire branch
+          head: ${{ github.ref_name }}
+          extra_args: --debug --only-verified
+
+      # Scan dependencies
+      # Can be excluded if the commit message contains: [skip scan-deps]
+      - name: Scan dependencies
+        if: ${{ !contains(env.commit_msg, '[skip scan-deps]') }}
+        run: make scan-deps
+
+      # Style consistency and static analysis
+      - name: Static analysis
+        run: make lint
+
+      # Run unit tests
+      - name: Test
+        run: make test
+
+      # Ensure project compile and build successfully
+      - name: Build
+        run: make build
+
+  # end-to-end tests
+  e2e:
+    name: end-to-end testing
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: test
+    steps:
+      # Harden workflow runner
+      - name: Harden workflow runner (audit all outbound calls)
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
+
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      # package manager
+      - name: Install pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        with:
+          version: 10
+
+      # NodeJS
+      - name: Set up NodeJS
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22 # current LTS
+          cache: 'pnpm' # cache pnpm packages automatically
+
+      # dependencies
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ensure .svelte-kit setup is valid
+      - name: Prepare project
+        run: npx run prepare
+
+      # install Playwright browsers
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      # run Playwright tests
+      - name: Run Playwright tests
+        run: make e2e
+
+      # save Playwright report
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 30
+          if-no-files-found: warn
