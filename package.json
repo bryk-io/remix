@@ -4,6 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
+    "audit": "pnpm audit --no-optional --audit-level critical",
     "build": "remix vite:build",
     "dev": "remix vite:dev",
     "e2e": "playwright test",

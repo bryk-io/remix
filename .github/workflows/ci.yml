@@ -44,10 +44,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # ensure .svelte-kit setup is valid
-      - name: Prepare project
-        run: npx run prepare
-
       # Get commit message
       - name: Get commit message
         run: |
@@ -117,10 +113,6 @@ jobs:
       # dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      # ensure .svelte-kit setup is valid
-      - name: Prepare project
-        run: npx run prepare
 
       # install Playwright browsers
       - name: Install Playwright

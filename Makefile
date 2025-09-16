@@ -34,6 +34,10 @@ e2e-ui:
 e2e-report:
 	npx playwright show-report
 
+## scan-deps: Look for CVEs in the project dependencies
+scan-deps:
+	npm run audit
+
 ## test: Run tests
 test:
 	npm run test

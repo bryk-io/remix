@@ -19,17 +19,18 @@ jobs:
     name: analyze
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       security-events: write # for autobuild to send a status report
     strategy:
       fail-fast: false
       matrix:
         language: ['javascript']
     steps:
-      # # Harden workflow runner
-      # - name: Harden workflow runner (audit all outbound calls)
-      #   uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
-      #   with:
-      #     egress-policy: audit
+      # Harden workflow runner
+      - name: Harden workflow runner (audit all outbound calls)
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
 
       # Checkout code
       - name: Checkout repository
@@ -41,13 +42,6 @@ jobs:
           echo 'commit_msg<<EOF' >> $GITHUB_ENV
           git log --format=%B -n 1 ${{ github.sha }} >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-
-      # Prepare runner environment
-      - name: Set up runner environment
-        run: ./.github/workflows/assets/utils.sh setup
-        env:
-          GITHUB_USER: ${{ github.actor }}
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
